@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  api:
+    image: node:23-alpine
+    working_dir: /app
+    # Clone the repo into the container and start the server
+    command: >
+      sh -c "
+        git clone https://github.com/lubabs770/clean.git . &&
+        cd server &&
+        npm install &&
+        node server.js /music
+      "
+    ports:
+      - "3001:3001"
+    volumes:
+      # Mount your local music directory here. Change the path on the left
+      # to wherever your music files are stored on your machine.
+      # E.g., /Users/you/Music or /home/you/Music or C:\Users\you\Music (Windows)
+      - /path/to/your/music:/music
+    environment:
+      NODE_ENV: production
+
+  ui:
+    image: node:23-alpine
+    working_dir: /app
+    command: >
+      sh -c "
+        git clone https://github.com/lubabs770/clean.git . &&
+        cd front &&
+        npm install &&
+        npm run build &&
+        npm install -g serve &&
+        serve -s dist -l 5173
+      "
+    ports:
+      - "5173:5173"
+    depends_on:
+      - api
+    environment:
+      VITE_API_BASE_URL: http://localhost:3001/api
+      NODE_ENV: production

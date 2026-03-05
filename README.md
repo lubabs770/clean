@@ -53,3 +53,26 @@ frontend makes XHR/fetch requests to the API at `http://localhost:3001/api`.
 You can add a root `package.json` with a concurrent script or use tools like
 `concurrently` or `npm-run-all` to start both services with a single command.
 That’s not required but may simplify project workflows.
+### Docker
+
+A `docker-compose.yaml` is included that builds both the API and frontend using
+Alpine Node. Before running, **edit the `volumes` section** in `docker-compose.yaml`
+and set the left side of the music mount to your local directory, e.g.:
+
+```yaml
+volumes:
+  - /Users/you/Music:/music  # macOS
+  - /home/you/Music:/music   # Linux
+  - C:\Users\you\Music:/music # Windows (with WSL2)
+```
+
+Then:
+
+```bash
+docker-compose up
+```
+
+The services will clone the repo, install dependencies, and start:
+
+- API on `http://localhost:3001`
+- UI on `http://localhost:5173`
