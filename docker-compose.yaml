@@ -1,12 +1,11 @@
-version: '3.8'
-
 services:
   api:
     image: node:23-alpine
     working_dir: /app
-    # Clone the repo into the container and start the server
+    # Install git, clone the repo, and start the server
     command: >
       sh -c "
+        apk add --no-cache git &&
         git clone https://github.com/lubabs770/clean.git . &&
         cd server &&
         npm install &&
@@ -25,8 +24,10 @@ services:
   ui:
     image: node:23-alpine
     working_dir: /app
+    # Install git, clone the repo, build the frontend
     command: >
       sh -c "
+        apk add --no-cache git &&
         git clone https://github.com/lubabs770/clean.git . &&
         cd front &&
         npm install &&
