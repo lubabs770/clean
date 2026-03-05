@@ -13,10 +13,10 @@ frontend makes XHR/fetch requests to the API at `http://localhost:3001/api`.
 **Quick start** (copy & paste):
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/lubabs770/clean/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/lubabs770/clean/main/install.sh -o install.sh && chmod +x install.sh && ./install.sh
 ```
 
-This downloads and runs the installer, which will prompt for your music directory and start the services.
+This downloads the installer, makes it executable, and runs it. You'll be prompted for your music directory, then the services will start.
 
 **Easiest way:** Run the installer script (requires Docker):
 
