@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # Music App Installer
-# Prompts for and configures the docker-compose setup, then starts the services.
+# Minimal local setup: downloads docker-compose.yaml, prompts for music directory,
+# and lets Docker handle cloning and setting up the entire app.
 
 set -e
 
@@ -27,28 +28,25 @@ MUSIC_DIR="$(cd "$MUSIC_DIR" && pwd)"
 echo "✅ Using music directory: $MUSIC_DIR"
 echo ""
 
-# Check if docker-compose.yaml exists
-if [ ! -f "docker-compose.yaml" ]; then
-  echo "❌ docker-compose.yaml not found in current directory"
-  exit 1
-fi
+# Create a minimal temp working directory
+WORK_DIR=$(mktemp -d)
+cd "$WORK_DIR"
 
-# Backup the original
-cp docker-compose.yaml docker-compose.yaml.bak
+echo "📦 Downloading docker-compose configuration..."
 
-# Update the volumes path in docker-compose.yaml
-# This sed command replaces /path/to/your/music with the user's path
+# Download just the docker-compose.yaml
+curl -fsSL https://raw.githubusercontent.com/lubabs770/clean/main/docker-compose.yaml -o docker-compose.yaml
+
+# Update the volumes path
 if [[ "$OSTYPE" == "darwin"* ]]; then
-  # macOS requires -i with a backup extension
   sed -i '' "s|/path/to/your/music|$MUSIC_DIR|g" docker-compose.yaml
 else
-  # Linux
   sed -i "s|/path/to/your/music|$MUSIC_DIR|g" docker-compose.yaml
 fi
 
-echo "📝 Updated docker-compose.yaml"
+echo "📝 Configured services"
 echo ""
-echo "Starting services..."
+echo "Starting containers (this may take a moment on first run)..."
 echo "  🌐 API:  http://localhost:3001"
 echo "  🎨 UI:   http://localhost:5173"
 echo ""
