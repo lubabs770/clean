@@ -46,7 +46,7 @@ That’s not required but may simplify project workflows.
 ### Docker
 
 A `docker-compose.yaml` and installer script are included for a seamless setup.
-**Use the installer** – it handles everything:
+**Use the installer** – it handles everything (now includes dev deps for frontend build):
 
 ```bash
 ./install.sh

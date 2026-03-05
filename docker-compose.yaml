@@ -30,8 +30,8 @@ services:
         apk add --no-cache git &&
         git clone https://github.com/lubabs770/clean.git . &&
         cd front &&
-        npm install &&
-        npm install -g typescript &&
+        # include devDependencies so tsc is installed for build
+        npm install --include=dev &&
         npm run build &&
         npm install -g serve &&
         serve -s dist -l 5173
