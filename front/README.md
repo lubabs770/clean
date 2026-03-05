@@ -4,9 +4,19 @@ React + TypeScript + Vite music browser application.
 
 ## Setup
 
+First make sure the API server is running (see `../server/README.md`). The
+React app expects a JSON API at `/api` (proxied to `http://localhost:3001` in
+development) or at whatever URL is configured via `VITE_API_BASE_URL`.
+
 ```bash
+# install dependencies
 npm install
-npm run dev        # Local dev server at http://localhost:5173
+
+# development server (http://localhost:5173). thanks to the proxy in
+# `vite.config.ts` you can call `/api/...` without CORS problems.
+npm run dev
+
+# other scripts
 npm run build      # Production build
 npm run lint       # Run ESLint
 ```

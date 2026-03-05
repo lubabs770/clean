@@ -1,4 +1,10 @@
-const API_BASE_URL = 'http://localhost:3001/api';
+// The client should be able to work in different environments. When developing
+// with Vite we can proxy `/api` requests through the dev server so the frontend
+// and backend appear to be same-origin. In production an absolute URL may be
+// required, so we read a VITE_ environment variable with a sensible default.
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL?.toString() ||
+  '/api'; // use relative path for dev/proxy
 
 export class ApiError extends Error {
   statusCode?: number;

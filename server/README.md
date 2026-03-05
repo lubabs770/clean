@@ -16,18 +16,53 @@ music/
 
 ## Quick Start
 
+You must have the API running before the front‑end can fetch anything. The
+frontend expects the server to listen on `http://localhost:3001` and expose the
+`/api` and `/images` endpoints described below. During development the React
+app proxies these paths to avoid cross‑origin requests.
+
+The server is intentionally simple and can point at any directory on your
+filesystem. Use the included `cli.js` helper to select the path interactively
+or pass it directly on the command line:
+
 ```bash
 cd server
-./cli.js  # Interactive setup
+npm install                # only needed if you ever add dependencies
+
+# interactive mode (default music/ folder adjacent to repo root)
+./cli.js
+
+# or supply the path as an argument (no prompt):
+./cli.js /absolute/or/relative/path
+# or with a flag:
+./cli.js --dir /path/to/music
+./cli.js -d ../other/music-dir
+
+# behind the scenes the script sets MUSIC_DIR for you, but you can still run
+# the server manually:
+MUSIC_DIR=/path/to/music node server.js
 ```
+
+The server will log how many artists/albums/tracks it discovered. It scans the
+directory once at startup, so restart after adding or changing files.
+
+When the server starts it will log how many artists/albums/tracks it found.
+Create a `music/` directory alongside the repo root and add some artist folders
+if you want to see data. The server currently scans the directory on startup
+only, so restart it after adding new media.
 
 Prompts for music directory, starts server in background, shows PID to kill.
 
 ## Manual Start
 
+You can also run the server without the helper script. The executable accepts
+an optional path argument or uses the `MUSIC_DIR` environment variable:
+
 ```bash
 cd server
-MUSIC_DIR=/path/to/music node server.js
+node server.js /path/to/music          # pass directory directly
+# or
+MUSIC_DIR=/path/to/music node server.js # via env var
 ```
 
 ## API Endpoints
@@ -103,7 +138,7 @@ GET /api/albums/:id/tracks
 
 ### Health Check
 ```
-GET /health
+GET /health  (or `/api/health` for compatibility with the front‑end proxy)
 ```
 **Response:**
 ```json

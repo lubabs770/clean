@@ -5,8 +5,15 @@ const url = require('url');
 
 const PORT = 3001;
 
-// Set the music directory - change this to your music folder path
-const MUSIC_DIR = process.env.MUSIC_DIR || path.join(__dirname, '..', 'music');
+// Set the music directory – order of precedence:
+// 1. explicit CLI argument (`node server.js /path/to/dir`)
+// 2. MUSIC_DIR environment variable
+// 3. default folder adjacent to repo root (`../music`)
+let MUSIC_DIR = process.env.MUSIC_DIR || path.join(__dirname, '..', 'music');
+if (process.argv[2]) {
+  // resolve to absolute path so logging is clearer
+  MUSIC_DIR = path.resolve(process.argv[2]);
+}
 
 // Scan the music directory to build data
 function scanMusicDir(rootDir) {
@@ -206,7 +213,9 @@ const server = http.createServer((req, res) => {
         res.writeHead(404);
         res.end('Album not found');
       }
-    } else if (pathname === '/health') {
+    } else if (pathname === '/health' || pathname === '/api/health') {
+      // diagnose command-line / proxy compatibility; the front-end builds
+      // requests to `/api/health` so we mirror it here.
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({
         status: 'ok',
