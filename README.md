@@ -10,6 +10,16 @@ frontend makes XHR/fetch requests to the API at `http://localhost:3001/api`.
 
 ## Getting started
 
+**Easiest way:** Run the installer script (requires Docker):
+
+```bash
+./install.sh
+```
+
+It will prompt for your music directory, configure the services, and start them.
+
+**Manual setup:**
+
 1. **Prepare sample data** (optional). Create a `music/` directory next to the
    repo root and add at least one artist folder with a `bio.txt` and a
    subdirectory for an album. The server will work without media but the
@@ -55,15 +65,33 @@ You can add a root `package.json` with a concurrent script or use tools like
 That’s not required but may simplify project workflows.
 ### Docker
 
-A `docker-compose.yaml` is included that builds both the API and frontend using
-Alpine Node. Before running, **edit the `volumes` section** in `docker-compose.yaml`
-and set the left side of the music mount to your local directory, e.g.:
+A `docker-compose.yaml` and installer script are included for a seamless setup.
+**Use the installer** – it handles everything:
+
+```bash
+./install.sh
+```
+
+You will be prompted for your music directory path. The script will:
+
+1. Validate the directory exists
+2. Configure `docker-compose.yaml` with your path
+3. Start the API and UI services
+
+Once running:
+
+- API: `http://localhost:3001`
+- UI: `http://localhost:5173`
+
+**Manual Docker setup** (if you prefer):
+
+Edit `docker-compose.yaml` and set the music directory in the `volumes` section:
 
 ```yaml
 volumes:
   - /Users/you/Music:/music  # macOS
   - /home/you/Music:/music   # Linux
-  - C:\Users\you\Music:/music # Windows (with WSL2)
+  - C:\\Users\\you\\Music:/music # Windows (with WSL2)
 ```
 
 Then:
@@ -71,8 +99,3 @@ Then:
 ```bash
 docker-compose up
 ```
-
-The services will clone the repo, install dependencies, and start:
-
-- API on `http://localhost:3001`
-- UI on `http://localhost:5173`
